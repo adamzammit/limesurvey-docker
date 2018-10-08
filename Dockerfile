@@ -29,6 +29,7 @@ RUN set -x \
 	&& curl -SL "$DOWNLOAD_URL" -o /tmp/lime.tar.gz \
     && tar xf /tmp/lime.tar.gz --strip-components=1 -C /var/www/html \ 
     && rm /tmp/lime.tar.gz \
+    && mkdir /var/www/html/upload/surveys \
     && chown -R www-data:www-data /var/www/html
 
 #Set PHP defaults for Limesurvey (allow bigger uploads)
