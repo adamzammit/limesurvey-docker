@@ -95,5 +95,5 @@ Please see [the Docker installation documentation](https://docs.docker.com/insta
 Notes
 -----
 
-This Dockerfile is based on the [Wordpress official docker image](https://github.com/docker-library/wordpress/tree/8ab70dd61a996d58c0addf4867a768efe649bf65/php5.6/apache)
+This Dockerfile is based on the [php official docker image](https://hub.docker.com/_/php)
 
