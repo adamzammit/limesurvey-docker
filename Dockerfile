@@ -33,8 +33,7 @@ RUN set -x; \
 	curl -SL "$DOWNLOAD_URL" -o /tmp/lime.tar.gz; \
     echo "$DOWNLOAD_SHA256 /tmp/lime.tar.gz" | sha256sum -c -; \
     tar xf /tmp/lime.tar.gz --strip-components=1 -C /var/www/html; \
-    rm /tmp/lime.tar.gz; \
-    chown -R www-data:www-data /var/www/html
+    rm /tmp/lime.tar.gz
 
 #Set PHP defaults for Limesurvey (allow bigger uploads)
 RUN { \
