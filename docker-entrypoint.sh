@@ -107,11 +107,12 @@ EOPHP
 		DBENGINE='InnoDB'
     fi
 
+    chown -R $APACHE_RUN_USER:$APACHE_RUN_USER /var/www/html
 
-    chown www-data:www-data -R tmp 
+    chown $APACHE_RUN_USER:$APACHE_RUN_USER -R tmp 
     mkdir -p upload/surveys
-    chown www-data:www-data -R upload 
-    chown www-data:www-data -R application/config
+    chown $APACHE_RUN_USER:$APACHE_RUN_USER -R upload 
+    chown $APACHE_RUN_USER:$APACHE_RUN_USER -R application/config
 
 	DBSTATUS=$(TERM=dumb php -- "$LIMESURVEY_DB_HOST" "$LIMESURVEY_DB_USER" "$LIMESURVEY_DB_PASSWORD" "$LIMESURVEY_DB_NAME" "$LIMESURVEY_TABLE_PREFIX" "$MYSQL_SSL_CA" <<'EOPHP'
 <?php
