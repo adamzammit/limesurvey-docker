@@ -15,7 +15,7 @@ services:
       LIMESURVEY_ADMIN_EMAIL: lime@lime.lime
 
   mysql:
-    image: mariadb
+    image: mariadb:10.5
     environment:
       MYSQL_ROOT_PASSWORD: ex/a|mple
 
