@@ -3,7 +3,7 @@ version: '2'
 services:
 
   limesurvey:
-    image: acspri/limesurvey:3.28.21-lts
+    image: acspri/limesurvey:3.28.22-lts
     build: .
     ports:
       - 8082:80
@@ -15,7 +15,7 @@ services:
       LIMESURVEY_ADMIN_EMAIL: lime@lime.lime
 
   mysql:
-    image: mariadb
+    image: mariadb:10.5
     environment:
       MYSQL_ROOT_PASSWORD: ex/a|mple
 
