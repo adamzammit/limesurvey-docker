@@ -117,6 +117,9 @@ EOPHP
 		sed -i "/ENGINE=MyISAM/s/\(ENGINE=MyISAM \)//1" application/core/db/MysqlSchema.php
     fi
 
+    #Set timezone based on environment to config file if not already there
+    grep -qF 'date_default_timezone_set' application/config/config.php || sed --in-place '/^}/a\$longName = exec("echo \\$TZ"); if (!empty($longName)) {date_default_timezone_set($longName);}' application/config/config.php
+
 
     chown www-data:www-data -R tmp 
     mkdir -p upload/surveys
