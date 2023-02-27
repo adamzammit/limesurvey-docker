@@ -106,7 +106,7 @@ EOPHP
     if [ -n "$LIMESURVEY_USE_DB_SESSIONS" ]; then
         #Add session line
 awk '/DbHttpSession/ && c == 0 { c = 1; system("cat") } { print }' application/config/config.php > application/config/config.tmp <<'EOPHP'
-'session' => array ('class' => 'application.core.web.DbHttpSession', 'connectionID' => 'db', 'sessionTableName' => '{{sessions}}', ),
+'session' => array ('class' => 'application.core.web.DbHttpSession', 'connectionID' => 'db', 'sessionTableName' => '{{sessions}}', 'autoCreateSessionTable' => false, ),
 EOPHP
        mv application/config/config.tmp application/config/config.php
     fi
@@ -189,6 +189,67 @@ EOPHP
 		echo >&2 'Updating password for admin user'
         php application/commands/console.php resetpassword "$LIMESURVEY_ADMIN_USER" "$LIMESURVEY_ADMIN_PASSWORD"
 	fi
+
+    if [ -n "$LIMESURVEY_USE_DB_SESSIONS" ]; then
+        #Ensure sessions table exists and there is an index on the expire column for performance
+
+        echo >&2 'Ensure sessions table exists and index on expire column for extra performance'
+DBSTATUS=$(TERM=dumb php -- "$LIMESURVEY_DB_HOST" "$LIMESURVEY_DB_USER" "$LIMESURVEY_DB_PASSWORD" "$LIMESURVEY_DB_NAME" "$LIMESURVEY_TABLE_PREFIX" "$MYSQL_SSL_CA" <<'EOPHP'
+<?php
+error_reporting(E_ERROR | E_PARSE);
+
+$stderr = fopen('php://stderr', 'w');
+
+list($host, $socket) = explode(':', $argv[1], 2);
+$port = 0;
+if (is_numeric($socket)) {
+        $port = (int) $socket;
+        $socket = null;
+}
+
+$maxTries = 10;
+do {
+    $con = mysqli_init();
+    if (isset($argv[6]) && !empty($argv[6])) {
+	    mysqli_ssl_set($con,NULL,NULL,"/var/www/html/" . $argv[6],NULL,NULL);
+    }
+    $mysql = mysqli_real_connect($con,$host, $argv[2], $argv[3], '', $port, $socket, MYSQLI_CLIENT_SSL_DONT_VERIFY_SERVER_CERT);
+        if (!$mysql) {
+                fwrite($stderr, "\n" . 'MySQL Connection Error: (' . $mysql->connect_errno . ') ' . $mysql->connect_error . "\n");
+                --$maxTries;
+                if ($maxTries <= 0) {
+                        exit(1);
+                }
+                sleep(3);
+        }
+} while (!$mysql);
+
+$con->select_db($con->real_escape_string($argv[4]));
+
+$inst = $con->query("SELECT 1 FROM `" . $con->real_escape_string($argv[5]) . "sessions" . "`");
+
+if ($inst === FALSE) {
+    //create table with index
+    fwrite($stderr, "No sessions table exists - creating...\n");
+    $ntable = $con->query("CREATE TABLE `" . $con->real_escape_string($argv[5]) . "sessions" . "`(`id` varchar(32) NOT NULL, `expire` int(11) DEFAULT NULL, `data` blob, PRIMARY KEY (`id`), KEY(`expire`))");
+} else {
+    //check index
+    fwrite($stderr, "Checking index exists on expire column in sessions table...\n");
+    $indx = $con->query("SHOW INDEX FROM `" . $con->real_escape_string($argv[5]) . "sessions" . "` WHERE column_name = 'expire'");
+    if ($indx->num_rows == 0) {
+        fwrite($stderr, "No index exists on expire column in sessions table - creating...\n");
+        $nindx = $con->query("ALTER TABLE `" . $con->real_escape_string($argv[5]) . "sessions" . "` ADD INDEX (expire)");
+    } else {
+		fwrite($stderr, "Index exists!\n");
+	}
+}
+
+$con->close();
+
+EOPHP
+)
+    fi
+
 
     #flush asssets (clear cache on restart)
     php application/commands/console.php flushassets
