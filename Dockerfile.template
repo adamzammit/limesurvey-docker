@@ -47,6 +47,7 @@ RUN { \
 		echo 'max_execution_time=120'; \
         echo 'max_input_vars=10000'; \
         echo 'date.timezone=UTC'; \
+        echo 'session.gc_maxlifetime=86400'; \
 	} > /usr/local/etc/php/conf.d/uploads.ini
 
 VOLUME ["/var/www/html/plugins"]
