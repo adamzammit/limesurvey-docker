@@ -20,7 +20,7 @@ Tags corresponding to version on https://community.limesurvey.org/downloads/
 # How to use this image
 
 ```console
-$ docker run --name some-limesurvey --link some-mysql:mysql -d acspri/limesurvey
+$ docker run --name some-limesurvey --link some-mysql:mysql -d adamzammit/limesurvey
 ```
 
 The following environment variables are also honored for configuring your Limesurvey instance. If Limesurvey is already installed, these environment variables will update the Limesurvey config file.
@@ -46,7 +46,7 @@ If the `LIMESURVEY_DB_NAME` specified does not already exist on the given MySQL 
 If you'd like to be able to access the instance from the host without the container's IP, standard port mappings can be used:
 
 ```console
-$ docker run --name some-limesurvey --link some-mysql:mysql -p 8080:80 -d acspri/limesurvey
+$ docker run --name some-limesurvey --link some-mysql:mysql -p 8080:80 -d adamzammit/limesurvey
 ```
 
 Then, access it via `http://localhost:8080` or `http://host-ip:8080` in a browser.
@@ -55,7 +55,7 @@ If you'd like to use an external database instead of a linked `mysql` container,
 
 ```console
 $ docker run --name some-limesurvey -e LIMESURVEY_DB_HOST=10.1.2.3:3306 \
-    -e LIMESURVEY_DB_USER=... -e LIMESURVEY_DB_PASSWORD=... -d acspri/limesurvey
+    -e LIMESURVEY_DB_USER=... -e LIMESURVEY_DB_PASSWORD=... -d adamzammit/limesurvey
 ```
 
 ## ... via [`docker-compose`](https://github.com/docker/compose)
@@ -68,7 +68,7 @@ version: '2'
 services:
 
   limesurvey:
-    image: acspri/limesurvey
+    image: adamzammit/limesurvey
     ports:
       - 8082:80
     environment:
