@@ -21,7 +21,7 @@ sed -i -e "s/LIME_SHA/$SHA256/g" Dockerfile
 
 rm $VERSION.zip
 
-docker buildx build --no-cache --pull --push --platform linux/amd64,linux/arm64,linux/ppc64le,linux/mips64le,linux/arm/v7,linux/arm/v6,linux/s390x -t adamzammit/limesurvey:$VERSION -t adamzammit/limesurvey:latest -t acspri/limesurvey:$VERSION -t acspri/limesurvey:latest .
+docker buildx build --no-cache --pull --push --platform linux/amd64,linux/arm64,linux/ppc64le,linux/mips64le,linux/arm/v7,linux/arm/v6,linux/s390x -t adamzammit/limesurvey:$VERSION -t adamzammit/limesurvey:5 -t acspri/limesurvey:$VERSION -t acspri/limesurvey:5 .
 
 git add Dockerfile docker-compose.yml
 

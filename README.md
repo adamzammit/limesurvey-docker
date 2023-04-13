@@ -34,6 +34,7 @@ Volumes are specified for plugins and upload directories for persistence.
 
 -    latest - Tracks LimeSurvey latest stable release 
 -    lts - Tracks LimeSurvey LTS release
+-    5 - Tracks latest 5.x release
 
 Tags corresponding to version on https://community.limesurvey.org/downloads/
 
