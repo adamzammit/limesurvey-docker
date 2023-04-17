@@ -29,4 +29,4 @@ git commit -m "$VERSION release"
 
 git tag $VERSION
 
-git push --tags origin master
+git push --tags origin v5
