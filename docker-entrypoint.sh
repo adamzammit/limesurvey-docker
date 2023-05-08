@@ -37,6 +37,7 @@ if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
     file_env 'MYSQL_SSL_CA' ''
     file_env 'LIMESURVEY_USE_INNODB' ''
     file_env 'LIMESURVEY_USE_DB_SESSIONS' ''
+    file_env 'LIMESURVEY_DONT_SHOW_SCRIPT_NAME' ''
 
 	# if we're linked to MySQL and thus have credentials already, let's use them
 	file_env 'LIMESURVEY_DB_USER' "${MYSQL_ENV_MYSQL_USER:-root}"
@@ -108,6 +109,10 @@ EOPHP
 	set_config 'urlFormat' "'path'"
     set_config 'debug' "$LIMESURVEY_DEBUG"
     set_config 'debugsql' "$LIMESURVEY_SQL_DEBUG"
+    set_config 'showScriptName' "true"
+    if [ -n "$LIMESURVEY_DONT_SHOW_SCRIPT_NAME" ]; then
+        set_config 'showScriptName' "false"
+    fi
 
 	if [ -n "$MYSQL_SSL_CA" ]; then
 		set_config 'attributes' "array(PDO::MYSQL_ATTR_SSL_CA => '\/var\/www\/html\/$MYSQL_SSL_CA', PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false)"
