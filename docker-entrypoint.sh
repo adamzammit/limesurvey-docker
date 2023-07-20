@@ -76,10 +76,10 @@ awk '/lime_/ && c == 0 { c = 1; system("cat") } { print }' application/config/co
 EOPHP
     fi
 
-	# Install BaltimoreCyberTrustRoot.crt.pem
-	if ! [ -e BaltimoreCyberTrustRoot.crt.pem ]; then
+	# Install BaltimoreCyberTrustRoot.crt.pem if needed
+	if [ "$MYSQL_SSL_CA" == "BaltimoreCyberTrustRoot.crt.pem" ] && ! [ -e BaltimoreCyberTrustRoot.crt.pem ]; then
 		echo "Downloading BaltimoreCyberTrustroot.crt.pem"
-		if curl -o BaltimoreCyberTrustRoot.crt.pem -fsL "https://www.digicert.com/CACerts/BaltimoreCyberTrustRoot.crt.pem"; then
+		if curl -o BaltimoreCyberTrustRoot.crt.pem -fsL "https://cacerts.digicert.com/DigiCertGlobalRootG2.crt.pem"; then
             echo "Downloaded successfully"
         else
             echo "Failed to download certificate - continuing anyway"
@@ -139,10 +139,10 @@ EOPHP
 
     #Set timezone based on environment to config file if not already there
     grep -qF 'date_default_timezone_set' application/config/config.php || sed --in-place '/^}/a\$longName = exec("echo \\$TZ"); if (!empty($longName)) {date_default_timezone_set($longName);}' application/config/config.php
-    chown www-data:www-data -R tmp 
+    chown www-data:www-data -R tmp
     chown www-data:www-data -R plugins
     mkdir -p upload/surveys
-    chown www-data:www-data -R upload 
+    chown www-data:www-data -R upload
     chown www-data:www-data -R application/config
     mkdir -p /var/lime/sessions
     chown www-data:www-data -R /var/lime/sessions

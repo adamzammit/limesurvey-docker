@@ -14,7 +14,7 @@ $ docker cp some-limesurvey:/var/www/html/application/config/security.php /tmp/s
 Then update to 5.0.8.1 or greater. You can then copy the security.php file back:
 
 ```console
-$ docker cp /tmp/security.php some-limesurvey:/var/www/html/application/config/security.php 
+$ docker cp /tmp/security.php some-limesurvey:/var/www/html/application/config/security.php
 ```
 
 5.0.8.1 or greater will persist the config directory.
@@ -32,7 +32,7 @@ Volumes are specified for plugins and upload directories for persistence.
 
 # Tags
 
--    latest - Tracks LimeSurvey latest stable release 
+-    latest - Tracks LimeSurvey latest stable release
 -    lts - Tracks LimeSurvey LTS release
 -    5 - Tracks latest 5.x release
 
@@ -60,7 +60,7 @@ The following environment variables are also honored for configuring your Limesu
 -	`-e LIMESURVEY_USE_INNODB=...` (defaults to '' - Leave blank or don't set to use standard MyISAM database. Set to any value to use InnoDB (required for some cloud providers))
 -	`-e LIMESURVEY_USE_DB_SESSIONS=...` (defaults to '' - Leave blank or don't set to use file based sessions. Set to any value to use DB based sessions
 -	`-e LIMESURVEY_DONT_SHOW_SCRIPT_NAME=...` (defaults to '' - Leave blank or don't set to show the script name `index.php` in URLs. Set to any value to omit the script name)
--	`-e MYSQL_SSL_CA=...` (path to an SSL CA for MySQL based in the root directory (/var/www/html). If changing paths, escape your forward slashes. Do not set or leave blank for a non SSL connection) - SECURITY NOTE: By default this image sets PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT to "false" for compatability reasons
+-	`-e MYSQL_SSL_CA=...` (path to an SSL CA for MySQL based in the root directory (/var/www/html). If changing paths, escape your forward slashes. Do not set or leave blank for a non SSL connection). If set to "BaltimoreCyberTrustRoot.crt.pem", the certificate is downloaded before the application is started (see [https://learn.microsoft.com/en-us/azure/mysql/single-server/how-to-configure-ssl#step-1-obtain-ssl-certificate](https://learn.microsoft.com/en-us/azure/mysql/single-server/how-to-configure-ssl#step-1-obtain-ssl-certificate)) - SECURITY NOTE: By default this image sets PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT to "false" for compatability reasons
 -	`-e TZ=...` Time zone name. If set, will configure PHP and LimeSurvey to use this time zone
 
 If the `LIMESURVEY_DB_NAME` specified does not already exist on the given MySQL server, it will be created automatically upon startup of the `limesurvey` container, provided that the `LIMESURVEY_DB_USER` specified has the necessary permissions to create it.
@@ -80,7 +80,7 @@ $ docker run --name some-limesurvey -e LIMESURVEY_DB_HOST=10.1.2.3:3306 \
     -e LIMESURVEY_DB_USER=... -e LIMESURVEY_DB_PASSWORD=... -d adamzammit/limesurvey
 ```
 
-## Volumes and Persistence 
+## Volumes and Persistence
 
 Since 5.6.11 there are now 4 volumes defined in the Dockerfile:
 
