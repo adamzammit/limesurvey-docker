@@ -54,6 +54,8 @@ if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
 		exit 1
 	fi
 
+    chmod ug+w -R application/config
+
     if ! [ -e application/config/config.php ]; then
         echo >&2 "No config file in $(pwd) Copying default config file..."
 		#Copy default config file but also allow for the addition of attributes
@@ -114,13 +116,18 @@ EOPHP
 
 	if [ -n "$LIMESURVEY_USE_INNODB" ]; then
 		#If you want to use INNODB - remove MyISAM specification from LimeSurvey code
+        chmod ug+w application/core/db/MysqlSchema.php
 		sed -i "/ENGINE=MyISAM/s/\(ENGINE=MyISAM \)//1" application/core/db/MysqlSchema.php
+        chmod ug-w application/core/db/MysqlSchema.php
     fi
 
     #Set timezone based on environment to config file if not already there
     grep -qF 'date_default_timezone_set' application/config/config.php || sed --in-place '/^}/a\$longName = exec("echo \\$TZ"); if (!empty($longName)) {date_default_timezone_set($longName);}' application/config/config.php
 
 
+    chmod ug-w -R application/config
+    chmod ug=rwx -R tmp
+    chmod ug=rwx -R upload
     chown www-data:www-data -R tmp 
     mkdir -p upload/surveys
     chown www-data:www-data -R upload 
