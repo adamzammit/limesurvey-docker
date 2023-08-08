@@ -56,17 +56,19 @@ if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
 	fi
 
     echo >&2 "Copying default container default config files into config volume..."
-    cp -dR /var/lime/application/config/* application/config
+    cp -dpR /var/lime/application/config/* application/config
 
     if ! [ -e plugins/index.html ]; then
         echo >&2 "No index.html file in plugins dir in $(pwd) Copying defaults..."
-        cp -dR /var/lime/plugins/* plugins
+        cp -dpR /var/lime/plugins/* plugins
     fi
 
     if ! [ -e upload/index.html ]; then
         echo >&2 "No index.html file upload dir in $(pwd) Copying defaults..."
-        cp -dR /var/lime/upload/* upload
+        cp -dpR /var/lime/upload/* upload
     fi
+
+    chmod ug+w -R application/config
 
     if ! [ -e application/config/config.php ]; then
         echo >&2 "No config file in $(pwd) Copying default config file..."
@@ -130,15 +132,20 @@ EOPHP
 
 
 	if [ -n "$LIMESURVEY_USE_INNODB" ]; then
+        chmod ug+w application/core/db/MysqlSchema.php
 		#If you want to use INNODB - remove MyISAM specification from LimeSurvey code
 		sed -i "/ENGINE=MyISAM/s/\(ENGINE=MyISAM \)//1" application/core/db/MysqlSchema.php
         #Also set mysqlEngine in config file
 		sed -i "/\/\/ Update default LimeSurvey config here/s//'mysqlEngine'=>'InnoDB',/" application/config/config.php
 		DBENGINE='InnoDB'
+        chmod ug-w application/core/db/MysqlSchema.php
     fi
 
     #Set timezone based on environment to config file if not already there
     grep -qF 'date_default_timezone_set' application/config/config.php || sed --in-place '/^}/a\$longName = exec("echo \\$TZ"); if (!empty($longName)) {date_default_timezone_set($longName);}' application/config/config.php
+    chmod ug-w -R application/config
+    chmod ug=rwx -R tmp
+    chmod ug=rwx -R upload
     chown www-data:www-data -R tmp
     chown www-data:www-data -R plugins
     mkdir -p upload/surveys
@@ -146,6 +153,7 @@ EOPHP
     chown www-data:www-data -R application/config
     mkdir -p /var/lime/sessions
     chown www-data:www-data -R /var/lime/sessions
+    chmod ug=rwx -R /var/lime/sessions
 
 	DBSTATUS=$(TERM=dumb php -- "$LIMESURVEY_DB_HOST" "$LIMESURVEY_DB_USER" "$LIMESURVEY_DB_PASSWORD" "$LIMESURVEY_DB_NAME" "$LIMESURVEY_TABLE_PREFIX" "$MYSQL_SSL_CA" <<'EOPHP'
 <?php
