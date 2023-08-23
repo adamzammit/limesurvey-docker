@@ -38,6 +38,7 @@ RUN set -x; \
     rm /tmp/lime.zip; \
     rmdir /tmp/lime*; \
     chown -R www-data:www-data /var/www/html; \
+    chmod -R ug=rx /var/www/html; \
     mkdir -p /var/lime/application/config; \
     mkdir -p /var/lime/upload; \
     mkdir -p /var/lime/plugins; \
