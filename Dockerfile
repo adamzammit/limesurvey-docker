@@ -1,7 +1,7 @@
 FROM php:8.0-apache
 
-ENV DOWNLOAD_URL https://download.limesurvey.org/latest-3.x-LTS/limesurvey3.28.70+230823.zip
-ENV DOWNLOAD_SHA256 06eef1566e1d9f560cd734fa38f609e88447e080ba01460a03f4ea34e2d460a0
+ENV DOWNLOAD_URL https://download.limesurvey.org/latest-3.x-LTS/limesurvey3.28.71+230824.zip
+ENV DOWNLOAD_SHA256 32f9d8fae058712aafe61cf3ef0b4f4f27c49498ae05f695c705a942cd207150
 
 # install the PHP extensions we need
 RUN apt-get update && apt-get install -y unzip libc-client-dev libfreetype6-dev libmcrypt-dev libpng-dev libjpeg-dev libldap-common libldap2-dev zlib1g-dev libkrb5-dev libtidy-dev libzip-dev libsodium-dev && rm -rf /var/lib/apt/lists/* \
@@ -37,7 +37,8 @@ RUN set -x; \
     mv /tmp/lime*/.[a-zA-Z]* /var/www/html/; \
     rm /tmp/lime.zip; \
     rmdir /tmp/lime*; \
-    chown -R www-data:www-data /var/www/html
+    chown -R www-data:www-data /var/www/html; \
+    chmod -R ug=rx /var/www/html
 
 #Set PHP defaults for Limesurvey (allow bigger uploads)
 RUN { \
