@@ -21,12 +21,33 @@ sed -i -e "s/LIME_SHA/$SHA256/g" Dockerfile
 
 rm $VERSION.zip
 
-docker buildx build --pull --no-cache --push --platform linux/amd64,linux/arm64,linux/ppc64le,linux/mips64le,linux/arm/v7,linux/arm/v6,linux/s390x -t adamzammit/limesurvey:$VERSION-lts -t adamzammit/limesurvey:lts -t acspri/limesurvey:$VERSION-lts -t acspri/limesurvey:lts .
+docker buildx build --pull --no-cache --output type=image,push=false --platform linux/amd64,linux/arm64,linux/ppc64le,linux/mips64le,linux/arm/v7,linux/arm/v6,linux/s390x -t adamzammit/limesurvey:$VERSION-lts -t adamzammit/limesurvey:lts -t acspri/limesurvey:$VERSION-lts -t acspri/limesurvey:lts .
 
-git add Dockerfile docker-compose.yml
+docker-compose down
 
-git commit -m "$VERSION-lts release"
+docker-compose up -d
 
-git tag $VERSION-lts
+sleep 60
 
-git push --tags origin lts
+curl -v --silent localhost:8082 2>&1 | grep 'HTTP/1.1 200 OK' && status=success || status=fail
+curl -v --silent localhost:8082 2>&1 | grep 'LimeSurvey' && status2=success || status2=fail
+
+docker-compose down
+
+if [ "$status" == "success" ] && [ "$status2" == "success" ]; then
+
+    docker push adamzammit/limesurvey:$VERSION-lts
+    docker push adamzammit/limesurvey:lts
+    docker push acspri/limesurvey:$VERSION-lts
+    docker push acspri/limesurvey:lts
+
+    git add Dockerfile docker-compose.yml
+
+    git commit -m "$VERSION-lts release"
+
+    git tag $VERSION-lts
+
+    git push --tags origin lts
+else
+    echo "Did not commit or push build: acspri/limesurvey:$VERSION-lts due to error" | mail -s "Error in build $VERSION-lts" adam@acspri.org.au
+fi
