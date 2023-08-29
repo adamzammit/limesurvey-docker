@@ -1,7 +1,7 @@
 FROM php:8.0-apache
 
-ENV DOWNLOAD_URL https://download.limesurvey.org/latest-5.x/limesurvey5.6.35+230822.zip
-ENV DOWNLOAD_SHA256 dc083bd579a7a917f9304ea7f84026671b32295ef70d8ac65cede29c18949206
+ENV DOWNLOAD_URL https://download.limesurvey.org/latest-5.x/limesurvey5.6.36+230830.zip
+ENV DOWNLOAD_SHA256 7400f268b3909a823dc6fd971feb2d25c033f6fdedfb30670d3b0ef5f5ffa457
 
 # install the PHP extensions we need
 RUN apt-get update && apt-get install -y unzip libc-client-dev libfreetype6-dev libmcrypt-dev libpng-dev libjpeg-dev libldap-common libldap2-dev zlib1g-dev libkrb5-dev libtidy-dev libzip-dev libsodium-dev && rm -rf /var/lib/apt/lists/* \
@@ -38,6 +38,7 @@ RUN set -x; \
     rm /tmp/lime.zip; \
     rmdir /tmp/lime*; \
     chown -R www-data:www-data /var/www/html; \
+    chmod -R ug=rx /var/www/html; \
     mkdir -p /var/lime/application/config; \
     mkdir -p /var/lime/upload; \
     mkdir -p /var/lime/plugins; \
