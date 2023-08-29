@@ -21,7 +21,8 @@ sed -i -e "s/LIME_SHA/$SHA256/g" Dockerfile
 
 rm $VERSION.zip
 
-docker buildx build --pull --no-cache --output type=image,push=false --platform linux/amd64,linux/arm64,linux/ppc64le,linux/mips64le,linux/arm/v7,linux/arm/v6,linux/s390x -t adamzammit/limesurvey:$VERSION-lts -t adamzammit/limesurvey:lts -t acspri/limesurvey:$VERSION-lts -t acspri/limesurvey:lts .
+docker pull php:8.0-apache
+docker build . -t adamzammit/limesurvey:$VERSION-lts
 
 docker-compose down
 
@@ -36,10 +37,7 @@ docker-compose down
 
 if [ "$status" == "success" ] && [ "$status2" == "success" ]; then
 
-    docker push adamzammit/limesurvey:$VERSION-lts
-    docker push adamzammit/limesurvey:lts
-    docker push acspri/limesurvey:$VERSION-lts
-    docker push acspri/limesurvey:lts
+    docker buildx build --pull --no-cache --push --platform linux/amd64,linux/arm64,linux/ppc64le,linux/mips64le,linux/arm/v7,linux/arm/v6,linux/s390x -t adamzammit/limesurvey:$VERSION-lts -t adamzammit/limesurvey:lts -t acspri/limesurvey:$VERSION-lts -t acspri/limesurvey:lts .
 
     git add Dockerfile docker-compose.yml
 
