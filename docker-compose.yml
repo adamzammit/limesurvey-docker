@@ -3,7 +3,7 @@ version: '2'
 services:
 
   limesurvey:
-    image: adamzammit/limesurvey:3.28.75-lts
+    image: adamzammit/limesurvey:3.28.76-lts
     ports:
       - 127.0.0.1:8082:80
     environment:
