@@ -56,7 +56,7 @@ if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
 	fi
 
     echo >&2 "Copying default container default config files into config volume..."
-    cp -dpR /var/lime/application/config/* application/config
+    cp -dpRf /var/lime/application/config/* application/config
 
     if ! [ -e plugins/index.html ]; then
         echo >&2 "No index.html file in plugins dir in $(pwd) Copying defaults..."

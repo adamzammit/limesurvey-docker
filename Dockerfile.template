@@ -46,7 +46,10 @@ RUN set -x; \
     chown -R www-data:www-data /var/lime/sessions; \
     cp -dpR /var/www/html/application/config/* /var/lime/application/config; \
     cp -dpR /var/www/html/upload/* /var/lime/upload; \
-    cp -dpR /var/www/html/plugins/* /var/lime/plugins
+    cp -dpR /var/www/html/plugins/* /var/lime/plugins; \
+    chown -R www-data:www-data /var/lime/application; \
+    chown -R www-data:www-data /var/lime/plugins; \
+    chown -R www-data:www-data /var/lime/upload
 
 #Set PHP defaults for Limesurvey (allow bigger uploads)
 RUN { \
