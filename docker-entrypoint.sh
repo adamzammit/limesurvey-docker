@@ -114,7 +114,7 @@ EOPHP
     }
 
     LIMESURVEY_DB_CHARSET="utf8mb4"
-    if [ $LIMESURVEY_DB_TYPE == pgsql ]; then
+    if [ $LIMESURVEY_DB_TYPE == "pgsql" ]; then
         LIMESURVEY_DB_CHARSET="utf8"
     fi
 
@@ -145,7 +145,7 @@ EOPHP
        mv application/config/config.tmp application/config/config.php
     fi
 
-
+    DBENGINE='MyISAM'
     if [ -n "$LIMESURVEY_USE_INNODB" ]; then
         chmod ug+w application/core/db/MysqlSchema.php
         #If you want to use INNODB - remove MyISAM specification from LimeSurvey code
@@ -199,14 +199,23 @@ EOPHP
     chmod ug=rwx -R /var/lime/sessions
 
 
-    # The following 4 lines are borrowed from martialblog's entrypoint.sh
+    # The following 12 lines are borrowed from martialblog's entrypoint.sh
+    # see: https://github.com/martialblog/docker-limesurvey/blob/master/6.0/apache/entrypoint.sh
     # Check if LimeSurvey database is provisioned
+
+    # Check if database is available
+    until nc -z -v -w30 "$LIMESURVEY_DB_HOST" "$LIMESURVEY_DB_PORT"
+    do
+        echo "Info: Waiting for database connection..."
+        sleep 5
+    done
+
     echo 'Info: Check if database already provisioned. Nevermind the stack trace.'
     php application/commands/console.php updatedb || MUST_CREATE_DB=true
 
     if [ -v MUST_CREATE_DB ] && [ -n "$LIMESURVEY_ADMIN_USER" ] && [ -n "$LIMESURVEY_ADMIN_PASSWORD" ]; then
         echo >&2 'Database not yet populated - installing Limesurvey database'
-        php application/commands/console.php install "$LIMESURVEY_ADMIN_USER" "$LIMESURVEY_ADMIN_PASSWORD" "$LIMESURVEY_ADMIN_NAME" "$LIMESURVEY_ADMIN_EMAIL" verbose
+        DBENGINE=$DBENGINE php application/commands/console.php install "$LIMESURVEY_ADMIN_USER" "$LIMESURVEY_ADMIN_PASSWORD" "$LIMESURVEY_ADMIN_NAME" "$LIMESURVEY_ADMIN_EMAIL" verbose
     fi
 
     if [ -n "$LIMESURVEY_ADMIN_USER" ] && [ -n "$LIMESURVEY_ADMIN_PASSWORD" ]; then
