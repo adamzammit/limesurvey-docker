@@ -45,7 +45,9 @@ $ docker run --name some-limesurvey --link some-mysql:mysql -d adamzammit/limesu
 
 The following environment variables are also honored for configuring your Limesurvey instance. If Limesurvey is already installed, these environment variables will update the Limesurvey config file.
 
+-	`-e LIMESURVEY_DB_TYPE=...` (defaults to 'mysql', change to 'pgsql' as needed)
 -	`-e LIMESURVEY_DB_HOST=...` (defaults to the IP and port of the linked `mysql` container)
+-	`-e LIMESURVEY_DB_PORT=...` (defaults to 3306, _must_ change to e.g. 5432 if a Postgres database is used)
 -	`-e LIMESURVEY_DB_USER=...` (defaults to "root")
 -	`-e LIMESURVEY_DB_PASSWORD=...` (defaults to the value of the `MYSQL_ROOT_PASSWORD` environment variable from the linked `mysql` container)
 -	`-e LIMESURVEY_DB_NAME=...` (defaults to "limesurvey")
@@ -143,4 +145,3 @@ Notes
 -----
 
 This Dockerfile is based on the Dockerfile from the [Wordpress official docker image](https://github.com/docker-library/wordpress/tree/8ab70dd61a996d58c0addf4867a768efe649bf65/php5.6/apache)
-
