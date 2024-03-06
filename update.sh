@@ -21,7 +21,7 @@ sed -i -e "s/LIME_SHA/$SHA256/g" Dockerfile
 
 rm $VERSION.zip
 
-docker pull php:8.0-apache
+docker pull php:8.1-apache
 docker build . -t adamzammit/limesurvey:$VERSION-lts
 
 docker-compose down

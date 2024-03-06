@@ -1,4 +1,4 @@
-FROM php:8.0-apache
+FROM php:8.1-apache
 
 ENV DOWNLOAD_URL https://download.limesurvey.org/latest-3.x-LTS/limesurvey3.28.77+231213.zip
 ENV DOWNLOAD_SHA256 9ad68e0f28a43bec068333d8e7673872bffaf1a29e2c2b1916112767b3c0dbd6
@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y unzip libc-client-dev libfreetype6-dev 
     && docker-php-ext-configure imap --with-imap-ssl --with-kerberos \
     && docker-php-ext-install imap \
     && docker-php-ext-install sodium \
-    && pecl install mcrypt-1.0.4 \
+    && pecl install mcrypt-1.0.7 \
     && docker-php-ext-enable mcrypt \
     && docker-php-ext-install exif
 
@@ -49,6 +49,7 @@ RUN { \
         echo 'max_input_vars=10000'; \
         echo 'date.timezone=UTC'; \
         echo 'session.gc_maxlifetime=86400'; \
+        echo 'error_reporting = E_ALL & ~E_DEPRECATED & ~E_NOTICE'; \
 	} > /usr/local/etc/php/conf.d/uploads.ini
 
 VOLUME ["/var/www/html/plugins"]

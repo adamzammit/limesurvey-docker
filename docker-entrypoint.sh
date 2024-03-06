@@ -138,17 +138,21 @@ EOPHP
 // database might not exist, so let's try creating it (just to be safe)
 
 error_reporting(E_ERROR | E_PARSE);
+mysqli_report(MYSQLI_REPORT_OFF);
 
 $stderr = fopen('php://stderr', 'w');
+$host = $argv[1];
+$socket = null;
+if (str_contains($host, ':')) {
+    list($host, $socket) = explode(':', $argv[1], 2);
+}
 
-list($host, $socket) = explode(':', $argv[1], 2);
 $port = 0;
 if (is_numeric($socket)) {
         $port = (int) $socket;
         $socket = null;
 }
 
-$maxTries = 10;
 do {
     $con = mysqli_init();
     if (isset($argv[6]) && !empty($argv[6])) {
@@ -156,11 +160,7 @@ do {
     }
     $mysql = mysqli_real_connect($con,$host, $argv[2], $argv[3], '', $port, $socket, MYSQLI_CLIENT_SSL_DONT_VERIFY_SERVER_CERT);
         if (!$mysql) {
-                fwrite($stderr, "\n" . 'MySQL Connection Error: (' . $mysql->connect_errno . ') ' . $mysql->connect_error . "\n");
-                --$maxTries;
-                if ($maxTries <= 0) {
-                        exit(1);
-                }
+                fwrite($stderr, "MySQL Connection Error will retry in 3 seconds...\n");
                 sleep(3);
         }
 } while (!$mysql);
@@ -171,9 +171,11 @@ if (!$con->query('CREATE DATABASE IF NOT EXISTS `' . $con->real_escape_string($a
         exit(1);
 }
 
-$con->select_db($con->real_escape_string($argv[4]));
+$stat = $con->select_db($con->real_escape_string($argv[4]));
 
-$inst = $con->query("SELECT * FROM `" . $con->real_escape_string($argv[5]) . "users" . "`");
+$inst = $con->query("SHOW TABLES LIKE '" . $con->real_escape_string($argv[5]) . "users'");
+
+$nrows = $inst->num_rows;
 
 $con->close();
 
@@ -204,17 +206,21 @@ EOPHP
 DBSTATUS=$(TERM=dumb php -- "$LIMESURVEY_DB_HOST" "$LIMESURVEY_DB_USER" "$LIMESURVEY_DB_PASSWORD" "$LIMESURVEY_DB_NAME" "$LIMESURVEY_TABLE_PREFIX" "$MYSQL_SSL_CA" <<'EOPHP'
 <?php
 error_reporting(E_ERROR | E_PARSE);
+mysqli_report(MYSQLI_REPORT_OFF);
 
 $stderr = fopen('php://stderr', 'w');
+$host = $argv[1];
+$socket = null;
+if (str_contains($host, ':')) {
+    list($host, $socket) = explode(':', $argv[1], 2);
+}
 
-list($host, $socket) = explode(':', $argv[1], 2);
 $port = 0;
 if (is_numeric($socket)) {
         $port = (int) $socket;
         $socket = null;
 }
 
-$maxTries = 10;
 do {
     $con = mysqli_init();
     if (isset($argv[6]) && !empty($argv[6])) {
@@ -222,16 +228,12 @@ do {
     }
     $mysql = mysqli_real_connect($con,$host, $argv[2], $argv[3], '', $port, $socket, MYSQLI_CLIENT_SSL_DONT_VERIFY_SERVER_CERT);
         if (!$mysql) {
-                fwrite($stderr, "\n" . 'MySQL Connection Error: (' . $mysql->connect_errno . ') ' . $mysql->connect_error . "\n");
-                --$maxTries;
-                if ($maxTries <= 0) {
-                        exit(1);
-                }
+                fwrite($stderr, "MySQL Connection Error will retry in 3 seconds...\n");
                 sleep(3);
         }
 } while (!$mysql);
 
-$con->select_db($con->real_escape_string($argv[4]));
+$stat = $con->select_db($con->real_escape_string($argv[4]));
 
 $inst = $con->query("SELECT 1 FROM `" . $con->real_escape_string($argv[5]) . "sessions" . "`");
 
