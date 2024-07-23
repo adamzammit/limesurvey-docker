@@ -5,7 +5,7 @@ services:
   limesurvey:
     image: registry.acspri.org.au/limesurvey:6.5.17
     ports:
-      - 127.0.0.1:8082:80
+      - 8082:80
     environment:
       LIMESURVEY_DB_PASSWORD: e/xa|m|ple
       LIMESURVEY_ADMIN_USER: admin
