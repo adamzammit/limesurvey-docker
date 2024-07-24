@@ -3,7 +3,7 @@ version: '2'
 services: 
 
   limesurvey:
-    image: registry.acspri.org.au/limesurvey:6.5.17
+    image: registry.acspri.org.au/limesurvey:6.5.18
     ports:
       - 8082:80
     environment:
