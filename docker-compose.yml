@@ -3,7 +3,7 @@ version: '2'
 services: 
 
   limesurvey:
-    image: registry.acspri.org.au/limesurvey:6.5.18
+    image: acspri/limesurvey:6.5.18
     ports:
       - 8082:80
     environment:
@@ -20,7 +20,7 @@ services:
       - ./sessions:/var/lime/sessions
 
   mysql:
-    image: registry.acspri.org.au/mariadb:10.5
+    image: mariadb:10.5
     environment:
       MYSQL_ROOT_PASSWORD: e/xa|m|ple
     volumes:
