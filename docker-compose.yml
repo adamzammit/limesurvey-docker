@@ -1,7 +1,7 @@
 services: 
 
   limesurvey:
-    image: adamzammit/limesurvey:6.6.1
+    image: adamzammit/limesurvey:session
     ports:
       - 127.0.0.1:8082:80
     environment:
@@ -10,6 +10,8 @@ services:
       LIMESURVEY_ADMIN_PASSWORD: password
       LIMESURVEY_ADMIN_NAME: Lime Administrator
       LIMESURVEY_ADMIN_EMAIL: lime@lime.lime
+      LIMESURVEY_PHP_SESSION_SAVE_HANDLER: redis
+      LIMESURVEY_PHP_SESSION_SAVE_PATH: tcp://redis:6379
       TZ: Europe/London
     volumes:
       - ./plugins:/var/www/html/plugins
@@ -23,4 +25,6 @@ services:
       MYSQL_ROOT_PASSWORD: e/xa|m|ple
     volumes:
        - ./mysql:/var/lib/mysql
-
+ 
+  redis:
+    image: redis:7

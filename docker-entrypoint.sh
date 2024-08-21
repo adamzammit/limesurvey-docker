@@ -145,6 +145,11 @@ EOPHP
        mv application/config/config.tmp application/config/config.php
     fi
 
+    echo "" > /usr/local/etc/php/conf.d/docker-php-ext-session.ini
+    if [ -n "$LIMESURVEY_PHP_SESSION_SAVE_HANDLER" ] && [ -n "$LIMESURVEY_PHP_SESSION_SAVE_PATH" ]; then
+        echo -e "session.save_handler = $LIMESURVEY_PHP_SESSION_SAVE_HANDLER\nsession.save_path = $LIMESURVEY_PHP_SESSION_SAVE_PATH" > /usr/local/etc/php/conf.d/sessions.ini
+    fi
+
     DBENGINE='MyISAM'
     if [ -n "$LIMESURVEY_USE_INNODB" ]; then
         chmod ug+w application/core/db/MysqlSchema.php
