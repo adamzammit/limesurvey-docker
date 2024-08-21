@@ -45,6 +45,8 @@ if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
     file_env 'LIMESURVEY_USE_INNODB' ''
     file_env 'LIMESURVEY_USE_DB_SESSIONS' ''
     file_env 'LIMESURVEY_DONT_SHOW_SCRIPT_NAME' ''
+    file_env 'LIMESURVEY_PHP_SESSION_SAVE_HANDLER' ''
+    file_env 'LIMESURVEY_PHP_SESSION_SAVE_PATH' ''
 
     # if we're linked to MySQL and thus have credentials already, let's use them
     file_env 'LIMESURVEY_DB_USER' "${MYSQL_ENV_MYSQL_USER:-root}"
@@ -145,8 +147,9 @@ EOPHP
        mv application/config/config.tmp application/config/config.php
     fi
 
-    echo "" > /usr/local/etc/php/conf.d/docker-php-ext-session.ini
+    echo "" > /usr/local/etc/php/conf.d/sessions.ini
     if [ -n "$LIMESURVEY_PHP_SESSION_SAVE_HANDLER" ] && [ -n "$LIMESURVEY_PHP_SESSION_SAVE_PATH" ]; then
+        echo "Configuring custom session handler for PHP"
         echo -e "session.save_handler = $LIMESURVEY_PHP_SESSION_SAVE_HANDLER\nsession.save_path = $LIMESURVEY_PHP_SESSION_SAVE_PATH" > /usr/local/etc/php/conf.d/sessions.ini
     fi
 
