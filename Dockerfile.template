@@ -44,13 +44,16 @@ RUN set -x; \
     mkdir -p /var/lime/application/config; \
     mkdir -p /var/lime/upload; \
     mkdir -p /var/lime/plugins; \
+    mkdir -p /var/lime/tmp; \
     mkdir -p /var/lime/sessions; \
     chown -R www-data:www-data /var/lime/sessions; \
     cp -dpR /var/www/html/application/config/* /var/lime/application/config; \
     cp -dpR /var/www/html/upload/* /var/lime/upload; \
     cp -dpR /var/www/html/plugins/* /var/lime/plugins; \
+    cp -dpR /var/www/html/tmp/* /var/lime/tmp; \
     chown -R www-data:www-data /var/lime/application; \
     chown -R www-data:www-data /var/lime/plugins; \
+    chown -R www-data:www-data /var/lime/tmp; \
     chown -R www-data:www-data /var/lime/upload
 
 #Set PHP defaults for Limesurvey (allow bigger uploads)

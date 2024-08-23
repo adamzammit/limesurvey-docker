@@ -72,6 +72,11 @@ if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
         cp -dpR /var/lime/plugins/* plugins
     fi
 
+    if ! [ -e tmp/index.html ]; then
+        echo >&2 "No index.html file in tmp dir in $(pwd) Copying defaults..."
+        cp -dpR /var/lime/tmp/* tmp
+    fi
+
     if ! [ -e upload/index.html ]; then
         echo >&2 "No index.html file upload dir in $(pwd) Copying defaults..."
         cp -dpR /var/lime/upload/* upload
