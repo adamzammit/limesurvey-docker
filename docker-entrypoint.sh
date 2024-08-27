@@ -67,6 +67,8 @@ if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
             exit 1
         fi
 
+        chmod ug+w -R application/config
+
         echo >&2 "Copying default container default config files into config volume..."
         cp -dpRf /var/lime/application/config/* application/config
 
@@ -84,8 +86,6 @@ if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
             echo >&2 "No index.html file upload dir in $(pwd) Copying defaults..."
             cp -dpR /var/lime/upload/* upload
         fi
-
-        chmod ug+w -R application/config
 
         if ! [ -e application/config/config.php ]; then
             echo >&2 "No config file in $(pwd) Copying default config file..."
@@ -154,12 +154,15 @@ EOPHP
 EOPHP
            mv application/config/config.tmp application/config/config.php
         fi
+    fi
 
-        echo "" > /usr/local/etc/php/conf.d/sessions.ini
-        if [ -n "$LIMESURVEY_PHP_SESSION_SAVE_HANDLER" ] && [ -n "$LIMESURVEY_PHP_SESSION_SAVE_PATH" ]; then
-            echo "Configuring custom session handler for PHP"
-            echo -e "session.save_handler = $LIMESURVEY_PHP_SESSION_SAVE_HANDLER\nsession.save_path = $LIMESURVEY_PHP_SESSION_SAVE_PATH" > /usr/local/etc/php/conf.d/sessions.ini
-        fi
+    echo "" > /usr/local/etc/php/conf.d/sessions.ini
+    if [ -n "$LIMESURVEY_PHP_SESSION_SAVE_HANDLER" ] && [ -n "$LIMESURVEY_PHP_SESSION_SAVE_PATH" ]; then
+        echo "Configuring custom session handler for PHP"
+        echo -e "session.save_handler = $LIMESURVEY_PHP_SESSION_SAVE_HANDLER\nsession.save_path = $LIMESURVEY_PHP_SESSION_SAVE_PATH" > /usr/local/etc/php/conf.d/sessions.ini
+    fi
+
+    if [ -z "$LIMESURVEY_DONT_UPDATE" ]; then
 
         DBENGINE='MyISAM'
         if [ -n "$LIMESURVEY_USE_INNODB" ]; then
