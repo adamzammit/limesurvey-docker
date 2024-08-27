@@ -20,6 +20,8 @@ RUN apt-get update && apt-get install -y unzip libc-client-dev libfreetype6-dev 
 
 RUN a2enmod rewrite
 
+RUN a2enmod remoteip
+
 # set recommended PHP.ini settings
 # see https://secure.php.net/manual/en/opcache.installation.php
 RUN { \
@@ -67,6 +69,13 @@ RUN { \
         echo 'session.gc_maxlifetime=86400'; \
         echo 'session.save_path="/var/lime/sessions"'; \
     } > /usr/local/etc/php/conf.d/limesurvey.ini
+
+
+#Accept remote ip from local proxies where X-Forwarded-For set
+RUN { \
+        echo 'RemoteIPHeader X-Forwarded-For'; \
+        echo 'RemoteIPInternalProxy 10.0.0.0/8 127.0.0.1'; \
+    } > /etc/apache2/conf-enabled/remoteip.conf
 
 VOLUME ["/var/www/html/plugins"]
 VOLUME ["/var/www/html/upload"]
