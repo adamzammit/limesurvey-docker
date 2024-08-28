@@ -97,16 +97,6 @@ EOPHP
             sed -i "/'config'=>array/s/$/\n'siteadminemail' => 'your-email@example.net',\n'siteadminbounce' => 'your-email@example.net',\n'siteadminname' => 'Your Name',\n'emailmethod' => 'mail',\n'emailsmtphost' => 'localhost',\n'emailsmtpuser' => '',\n'emailsmtppassword' => '',\n'emailsmtpssl' => '',\n'emailsmtpdebug' => '',/" application/config/config.php
         fi
 
-        # Install BaltimoreCyberTrustRoot.crt.pem if needed
-        if [ "$MYSQL_SSL_CA" == "BaltimoreCyberTrustRoot.crt.pem" ] && ! [ -e BaltimoreCyberTrustRoot.crt.pem ]; then
-            echo "Downloading BaltimoreCyberTrustroot.crt.pem"
-            if curl -o BaltimoreCyberTrustRoot.crt.pem -fsL "https://cacerts.digicert.com/DigiCertGlobalRootG2.crt.pem"; then
-                echo "Downloaded successfully"
-            else
-                echo "Failed to download certificate - continuing anyway"
-            fi
-        fi
-
         # see http://stackoverflow.com/a/2705678/433558
         sed_escape_lhs() {
             echo "$@" | sed -e 's/[]\/$*.^|[]/\\&/g'
@@ -153,6 +143,26 @@ EOPHP
     'session' => array ('class' => 'application.core.web.DbHttpSession', 'connectionID' => 'db', 'sessionTableName' => '{{sessions}}', 'autoCreateSessionTable' => false, ),
 EOPHP
            mv application/config/config.tmp application/config/config.php
+        fi
+    fi
+
+    # Install BaltimoreCyberTrustRoot.crt.pem if needed
+    if [ "$MYSQL_SSL_CA" == "BaltimoreCyberTrustRoot.crt.pem" ] && ! [ -e BaltimoreCyberTrustRoot.crt.pem ]; then
+        echo "Downloading BaltimoreCyberTrustroot.crt.pem"
+        if curl -o BaltimoreCyberTrustRoot.crt.pem -fsL "https://cacerts.digicert.com/DigiCertGlobalRootG2.crt.pem"; then
+            echo "Downloaded successfully"
+        else
+            echo "Failed to download certificate - continuing anyway"
+        fi
+    fi
+
+    # Install Amazon global-bundle.pem if needed
+    if [ "$MYSQL_SSL_CA" == "global-bundle.pem" ] && ! [ -e global-bundle.pem ]; then
+        echo "Downloading Amazon global-bundle.pem"
+        if curl -o global-bundle.pem -fsL "https://truststore.pki.rds.amazonaws.com/global/global-bundle.pem"; then
+            echo "Downloaded successfully"
+        else
+            echo "Failed to download certificate - continuing anyway"
         fi
     fi
 
