@@ -48,6 +48,7 @@ if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
     file_env 'LIMESURVEY_PHP_SESSION_SAVE_HANDLER' ''
     file_env 'LIMESURVEY_PHP_SESSION_SAVE_PATH' ''
     file_env 'LIMESURVEY_DONT_UPDATE' ''
+    file_env 'LIMESURVEY_API_MODE' 'off'
 
     if [ -z "$LIMESURVEY_DONT_UPDATE" ]; then
 
@@ -133,6 +134,11 @@ EOPHP
 
         if [ -n "$MYSQL_SSL_CA" ]; then
             set_config 'attributes' "array(PDO::MYSQL_ATTR_SSL_CA => '\/var\/www\/html\/$MYSQL_SSL_CA', PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false)"
+        fi
+
+        # Set the RPC API to one of 'off', 'json' or 'xml'
+        if [ -n "$LIMESURVEY_API_MODE" ]; then
+            sed -i "/'config'=>array(/a 'RPCInterface' => '$LIMESURVEY_API_MODE'," application/config/config.php
         fi
 
         #Remove session line if exists
