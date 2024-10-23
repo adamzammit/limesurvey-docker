@@ -48,6 +48,7 @@ if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
     file_env 'LIMESURVEY_PHP_SESSION_SAVE_HANDLER' ''
     file_env 'LIMESURVEY_PHP_SESSION_SAVE_PATH' ''
     file_env 'LIMESURVEY_DONT_UPDATE' ''
+    file_env 'LIMESURVEY_API_MODE' 'off'
 
     if [ -z "$LIMESURVEY_DONT_UPDATE" ]; then
 
@@ -94,7 +95,7 @@ if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
     'attributes' => array(),
 EOPHP
             # Add default email config, so it can be overriden later
-            sed -i "/'config'=>array/s/$/\n'siteadminemail' => 'your-email@example.net',\n'siteadminbounce' => 'your-email@example.net',\n'siteadminname' => 'Your Name',\n'emailmethod' => 'mail',\n'emailsmtphost' => 'localhost',\n'emailsmtpuser' => '',\n'emailsmtppassword' => '',\n'emailsmtpssl' => '',\n'emailsmtpdebug' => '',/" application/config/config.php
+            sed -i "/'config'=>array/s/$/\n'siteadminemail' => 'your-email@example.net',\n'siteadminbounce' => 'your-email@example.net',\n'siteadminname' => 'Your Name',\n'emailmethod' => 'mail',\n'emailsmtphost' => 'localhost',\n'emailsmtpuser' => '',\n'emailsmtppassword' => '',\n'emailsmtpssl' => '',\n'emailsmtpdebug' => '',\n'RPCInterface' => 'off',/" application/config/config.php
         fi
 
         # see http://stackoverflow.com/a/2705678/433558
@@ -126,6 +127,7 @@ EOPHP
         set_config 'urlFormat' "'path'"
         set_config 'debug' "$LIMESURVEY_DEBUG"
         set_config 'debugsql' "$LIMESURVEY_SQL_DEBUG"
+        set_config 'RPCInterface' "'$LIMESURVEY_API_MODE'"
         set_config 'showScriptName' "true"
         if [ -n "$LIMESURVEY_DONT_SHOW_SCRIPT_NAME" ]; then
             set_config 'showScriptName' "false"
