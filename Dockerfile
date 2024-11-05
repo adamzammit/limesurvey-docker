@@ -86,7 +86,7 @@ VOLUME ["/var/lime/sessions"]
 #ensure that the config is persisted especially for security.php
 VOLUME ["/var/www/html/application/config"]
 
-
+COPY global-bundle.pem /var/www/html/
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN ln -s usr/local/bin/docker-entrypoint.sh /entrypoint.sh # backwards compat
 
