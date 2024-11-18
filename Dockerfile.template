@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y unzip libc-client-dev libfreetype6-dev 
     && docker-php-ext-install imap \
     && docker-php-ext-install sodium \
     && pecl install mcrypt-1.0.6 \
-    && pecl install redis-6.0.2 \
+    && pecl install redis-6.1.0 \
     && docker-php-ext-enable mcrypt \
     && docker-php-ext-enable redis \
     && docker-php-ext-install exif
