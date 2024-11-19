@@ -24,7 +24,7 @@ rm $VERSION.zip
 
 #local build first for testing
 docker pull php:8.1-apache
-docker build . -t adamzammit/limesurvey:$VERSION
+docker build . --load -t adamzammit/limesurvey:$VERSION
 
 docker-compose down
 
@@ -41,7 +41,7 @@ docker-compose down
 
 if [ "$status" == "success" ] && [ "$status2" == "success" ]; then
 
-    docker buildx build --no-cache --pull --push --platform linux/amd64,linux/arm64,linux/mips64le,linux/arm/v7,linux/arm/v6 -t adamzammit/limesurvey:$VERSION -t adamzammit/limesurvey:latest -t acspri/limesurvey:$VERSION -t acspri/limesurvey:latest .
+    docker buildx build --no-cache --pull --push --platform linux/amd64,linux/arm64,linux/ppc64le,linux/mips64le,linux/arm/v7,linux/arm/v6,linux/s390x -t adamzammit/limesurvey:$VERSION -t adamzammit/limesurvey:latest -t acspri/limesurvey:$VERSION -t acspri/limesurvey:latest .
 
     git add Dockerfile docker-compose.yml
 
