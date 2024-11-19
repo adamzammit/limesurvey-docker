@@ -1,7 +1,7 @@
 FROM php:8.1-apache
 
-ENV DOWNLOAD_URL=https://download.limesurvey.org/latest-master/limesurvey6.6.8+241104.zip
-ENV DOWNLOAD_SHA256=26a910f1bc96f43071a062e04aa725280c19f74339ff5413772f4382a0d801db
+ENV DOWNLOAD_URL=https://download.limesurvey.org/latest-master/limesurvey6.7.0+241118.zip
+ENV DOWNLOAD_SHA256=331726527d541cd634e0f31451b5ffe2a904f603bdab818f4caf272289fcfd0c
 
 # install the PHP extensions we need
 RUN apt-get update && apt-get install -y unzip libc-client-dev libfreetype6-dev libmcrypt-dev libpng-dev libjpeg-dev libldap-common libldap2-dev zlib1g-dev libkrb5-dev libtidy-dev libzip-dev libsodium-dev libpq-dev libonig-dev netcat-openbsd && rm -rf /var/lib/apt/lists/* \
@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y unzip libc-client-dev libfreetype6-dev 
     && docker-php-ext-install imap \
     && docker-php-ext-install sodium \
     && pecl install mcrypt-1.0.6 \
-    && pecl install redis-6.0.2 \
+    && pecl install redis-6.1.0 \
     && docker-php-ext-enable mcrypt \
     && docker-php-ext-enable redis \
     && docker-php-ext-install exif
