@@ -28,7 +28,7 @@ docker build . -t adamzammit/limesurvey:$VERSION
 
 git add Dockerfile docker-compose.yml
 git commit -m "$VERSION release"
-git tag $VERSION
+git tag $VERSION-ecr
 
 curl -o global-bundle.pem -fsL "https://truststore.pki.rds.amazonaws.com/global/global-bundle.pem"
 AWS_PROFILE=kba aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 108782056908.dkr.ecr.eu-central-1.amazonaws.com
