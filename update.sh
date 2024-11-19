@@ -24,7 +24,7 @@ rm $VERSION.zip
 
 #local build first for testing
 docker pull php:8.1-apache
-docker build . -t adamzammit/limesurvey:$VERSION
+docker build --load . -t adamzammit/limesurvey:$VERSION
 
 git add Dockerfile docker-compose.yml
 git commit -m "$VERSION release"
