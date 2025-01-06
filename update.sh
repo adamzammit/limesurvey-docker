@@ -26,18 +26,18 @@ rm $VERSION.zip
 docker pull php:8.1-apache
 docker build . --load -t adamzammit/limesurvey:$VERSION
 
-docker-compose down
+docker compose down
 
 rm -rf sessions upload plugins config mysql
 
-docker-compose up -d
+docker compose up -d
 
 sleep 60
 
 curl -v --silent localhost:8082 2>&1 | grep 'HTTP/1.1 200 OK' && status=success || status=fail
 curl -v --silent localhost:8082 2>&1 | grep 'LimeSurvey' && status2=success || status2=fail
 
-docker-compose down
+docker compose down
 
 if [ "$status" == "success" ] && [ "$status2" == "success" ]; then
 
