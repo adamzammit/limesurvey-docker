@@ -23,7 +23,7 @@ rm $VERSION.zip
 
 
 #local build first for testing
-docker pull php:8.1-apache
+docker pull php:8.3-apache
 docker build . --load -t adamzammit/limesurvey:$VERSION
 
 docker compose down
