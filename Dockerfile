@@ -1,22 +1,20 @@
-FROM php:8.1-apache
+FROM php:8.3-apache
 
-ENV DOWNLOAD_URL=https://download.limesurvey.org/latest-master/limesurvey6.9.0+241218.zip
-ENV DOWNLOAD_SHA256=d75aa8bb904112eaa4f390488b0d785ad0af6a4107c2a8f1048c1677aaed6566
+ENV DOWNLOAD_URL=https://download.limesurvey.org/latest-master/limesurvey6.10.0+250106.zip
+ENV DOWNLOAD_SHA256=4246e060068caeef4f9024e7ff3cb1c4ef63c69f79a91fb3ffdaf762bf752123
 
 # install the PHP extensions we need
 RUN apt-get update && apt-get install -y unzip libc-client-dev libfreetype6-dev libmcrypt-dev libpng-dev libjpeg-dev libldap-common libldap2-dev zlib1g-dev libkrb5-dev libtidy-dev libzip-dev libsodium-dev libpq-dev libonig-dev netcat-openbsd && rm -rf /var/lib/apt/lists/* \
     && docker-php-ext-configure gd --with-freetype=/usr/include/  --with-jpeg=/usr \
-    && docker-php-ext-install gd mysqli mbstring pgsql pdo pdo_mysql pdo_pgsql opcache zip iconv tidy \
+    && docker-php-ext-install gd mysqli mbstring pdo pdo_mysql pdo_pgsql opcache zip iconv tidy sodium \
     && docker-php-ext-configure ldap --with-libdir=lib/$(gcc -dumpmachine)/ \
     && docker-php-ext-install ldap \
     && docker-php-ext-configure imap --with-imap-ssl --with-kerberos \
     && docker-php-ext-install imap \
-    && docker-php-ext-install sodium \
-    && pecl install mcrypt-1.0.6 \
+    && pecl install mcrypt-1.0.7 \
     && pecl install redis-6.1.0 \
     && docker-php-ext-enable mcrypt \
-    && docker-php-ext-enable redis \
-    && docker-php-ext-install exif
+    && docker-php-ext-enable redis
 
 RUN a2enmod rewrite
 
