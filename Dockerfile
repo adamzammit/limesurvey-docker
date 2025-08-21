@@ -1,7 +1,12 @@
 FROM php:8.3-apache
 
-ENV DOWNLOAD_URL=https://download.limesurvey.org/latest-master/limesurvey6.15.5+250724.zip
-ENV DOWNLOAD_SHA256=3f2282a498b90a7ccedc5a99e833ff994b758b4c79fd77efb49112f1ef1b203d
+ENV DOWNLOAD_URL=https://download.limesurvey.org/latest-master/limesurvey6.15.7+250820.zip
+ENV DOWNLOAD_SHA256=013751606465fcf0789ec705e7343aa81227c52aa2ab58b99e36f83c890e2b40
+
+#Need sury repo for libc-client-dev
+RUN curl -sSLo /tmp/debsuryorg-archive-keyring.deb https://packages.sury.org/debsuryorg-archive-keyring.deb \
+    && dpkg -i /tmp/debsuryorg-archive-keyring.deb \
+    && echo "deb [signed-by=/usr/share/keyrings/debsuryorg-archive-keyring.gpg] https://packages.sury.org/php/ trixie main" > /etc/apt/sources.list.d/php.list 
 
 # install the PHP extensions we need
 RUN apt-get update && apt-get install -y unzip libc-client-dev libfreetype6-dev libmcrypt-dev libpng-dev libjpeg-dev libldap-common libldap2-dev zlib1g-dev libkrb5-dev libtidy-dev libzip-dev libsodium-dev libpq-dev libonig-dev netcat-openbsd && rm -rf /var/lib/apt/lists/* \
