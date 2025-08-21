@@ -1,22 +1,25 @@
-FROM php:8.1-apache
+FROM php:8.3-apache
 
-ENV DOWNLOAD_URL=https://download.limesurvey.org/latest-master/limesurvey6.15.5+250724.zip
-ENV DOWNLOAD_SHA256=3f2282a498b90a7ccedc5a99e833ff994b758b4c79fd77efb49112f1ef1b203d
+ENV DOWNLOAD_URL=https://download.limesurvey.org/latest-master/limesurvey6.15.7+250820.zip
+ENV DOWNLOAD_SHA256=013751606465fcf0789ec705e7343aa81227c52aa2ab58b99e36f83c890e2b40
+
+#Need sury repo for libc-client-dev
+RUN curl -sSLo /tmp/debsuryorg-archive-keyring.deb https://packages.sury.org/debsuryorg-archive-keyring.deb \
+    && dpkg -i /tmp/debsuryorg-archive-keyring.deb \
+    && echo "deb [signed-by=/usr/share/keyrings/debsuryorg-archive-keyring.gpg] https://packages.sury.org/php/ trixie main" > /etc/apt/sources.list.d/php.list 
 
 # install the PHP extensions we need
 RUN apt-get update && apt-get install -y unzip libc-client-dev libfreetype6-dev libmcrypt-dev libpng-dev libjpeg-dev libldap-common libldap2-dev zlib1g-dev libkrb5-dev libtidy-dev libzip-dev libsodium-dev libpq-dev libonig-dev netcat-openbsd && rm -rf /var/lib/apt/lists/* \
     && docker-php-ext-configure gd --with-freetype=/usr/include/  --with-jpeg=/usr \
-    && docker-php-ext-install gd mysqli mbstring pgsql pdo pdo_mysql pdo_pgsql opcache zip iconv tidy \
+    && docker-php-ext-install gd mysqli mbstring pdo pdo_mysql pdo_pgsql opcache zip iconv tidy sodium \
     && docker-php-ext-configure ldap --with-libdir=lib/$(gcc -dumpmachine)/ \
     && docker-php-ext-install ldap \
     && docker-php-ext-configure imap --with-imap-ssl --with-kerberos \
     && docker-php-ext-install imap \
-    && docker-php-ext-install sodium \
-    && pecl install mcrypt-1.0.6 \
+    && pecl install mcrypt-1.0.7 \
     && pecl install redis-6.1.0 \
     && docker-php-ext-enable mcrypt \
-    && docker-php-ext-enable redis \
-    && docker-php-ext-install exif
+    && docker-php-ext-enable redis
 
 RUN a2enmod rewrite
 
