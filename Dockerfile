@@ -1,6 +1,6 @@
 FROM php:8.3-apache
 
-ENV DOWNLOAD_URL=https://download.limesurvey.org/latest-master/limesurvey6.15.7+250820.zip
+ENV DOWNLOAD_URL=https://download.limesurvey.org/latest-master/limesurvey6.15.8+250825.zip
 ENV DOWNLOAD_SHA256=013751606465fcf0789ec705e7343aa81227c52aa2ab58b99e36f83c890e2b40
 
 #Need sury repo for libc-client-dev
