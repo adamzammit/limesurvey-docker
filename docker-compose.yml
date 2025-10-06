@@ -1,7 +1,7 @@
 services: 
 
   limesurvey:
-    image: adamzammit/limesurvey:6.15.15
+    image: adamzammit/limesurvey:6.15.16
     ports:
       - 127.0.0.1:8082:80
     environment:
