@@ -1,7 +1,7 @@
 FROM php:8.3-apache
 
-ENV DOWNLOAD_URL=https://download.limesurvey.org/latest-master/limesurvey6.15.20+251021.zip
-ENV DOWNLOAD_SHA256=593d718d661d56e92600ec33cb3c72f0ef30e42f7aaa675bd8c6ffce406bf863
+ENV DOWNLOAD_URL=https://download.limesurvey.org/latest-master/limesurvey6.15.21+251028.zip
+ENV DOWNLOAD_SHA256=7a9dfa36befacbc27e58a3dcce8e6f15c6ee1b37ab40649bb418f739f52b2c10
 
 #Need sury repo for libc-client-dev
 RUN curl -sSLo /tmp/debsuryorg-archive-keyring.deb https://packages.sury.org/debsuryorg-archive-keyring.deb \
