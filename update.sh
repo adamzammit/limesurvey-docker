@@ -4,7 +4,7 @@
 set -e
 
 #extract version from URL
-VERSION=`echo $1 | sed 's|.*limesurvey\([0-9\.]*\)\+.*|\1|'`
+VERSION=`echo $1 | sed 's|.*limesurvey\([0-9\.a-z-]*\)\+.*|\1|'`
 
 curl "$1" > $VERSION.zip 
 
@@ -41,7 +41,7 @@ docker compose down
 
 if [ "$status" == "success" ] && [ "$status2" == "success" ]; then
 
-    docker buildx build --no-cache --pull --push --platform linux/amd64,linux/arm64,linux/arm/v7 -t adamzammit/limesurvey:$VERSION -t adamzammit/limesurvey:latest -t acspri/limesurvey:$VERSION -t acspri/limesurvey:latest .
+    docker buildx build --no-cache --pull --push --platform linux/amd64,linux/arm64,linux/arm/v7 -t adamzammit/limesurvey:$VERSION -t acspri/limesurvey:$VERSION -t adamzammit/limesurvey:developmajor -t acspri/limesurvey:developmajor .
 
     git add Dockerfile docker-compose.yml
 
@@ -49,7 +49,7 @@ if [ "$status" == "success" ] && [ "$status2" == "success" ]; then
 
     git tag $VERSION
 
-    git push --tags origin master
+    git push --tags origin developmajor
 else
     echo "Did not commit or push build: acspri/limesurvey:$VERSION due to error" | mail -s "Error in build $VERSION" adam@acspri.org.au
 fi
