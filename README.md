@@ -33,7 +33,7 @@ Volumes are specified for plugins and upload directories for persistence.
 # Tags
 
 -    latest - Tracks LimeSurvey latest stable release
--    lts - Tracks LimeSurvey LTS release
+-    developmajor - Tracks LimeSurvey major development releases (see: https://github.com/LimeSurvey/LimeSurvey/tree/develop-major)
 
 Tags corresponding to version on https://community.limesurvey.org/downloads/
 
