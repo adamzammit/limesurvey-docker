@@ -1,7 +1,7 @@
 FROM php:8.3-apache
 
-ENV DOWNLOAD_URL=https://download.limesurvey.org/latest-master/limesurvey6.16.4+260113.zip
-ENV DOWNLOAD_SHA256=e63556fcd1950a8a7db909d958a57f31da47651d9a440e30901590b81b55ee45
+ENV DOWNLOAD_URL=https://download.limesurvey.org/latest-develop-major/limesurvey7.0.0-beta1+260121.zip
+ENV DOWNLOAD_SHA256=098dadb4e33093994cb929078ef399810dd96e453d157a883e6dedaf5c0ed6eb
 
 #Need sury repo for libc-client-dev
 RUN curl -sSLo /tmp/debsuryorg-archive-keyring.deb https://packages.sury.org/debsuryorg-archive-keyring.deb \
@@ -16,8 +16,8 @@ RUN apt-get update && apt-get install -y unzip libc-client-dev libfreetype6-dev 
     && docker-php-ext-install ldap \
     && docker-php-ext-configure imap --with-imap-ssl --with-kerberos \
     && docker-php-ext-install imap \
-    && pecl install mcrypt-1.0.7 \
-    && pecl install redis-6.1.0 \
+    && pecl install mcrypt-1.0.9 \
+    && pecl install redis-6.3.0 \
     && docker-php-ext-enable mcrypt \
     && docker-php-ext-enable redis
 
