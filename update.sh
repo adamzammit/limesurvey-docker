@@ -4,7 +4,7 @@
 set -e
 
 #extract version from URL
-VERSION=`echo $1 | sed 's|.*limesurvey\([0-9\.a-z-]*\)\+.*|\1|'`
+VERSION=`echo $1 | sed 's|.*limesurvey\([0-9\.A-Za-z-]*\)\+.*|\1|'`
 
 curl "$1" > $VERSION.zip 
 
