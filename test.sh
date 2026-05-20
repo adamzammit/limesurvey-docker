@@ -24,7 +24,7 @@ rm $VERSION.zip
 
 #local build first for testing
 docker pull php:8.3-apache
-docker build . -t adamzammit/limesurvey:$VERSION
+docker build . --no-cache -t adamzammit/limesurvey:$VERSION
 
 docker-compose down
 
