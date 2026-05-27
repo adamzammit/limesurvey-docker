@@ -34,6 +34,7 @@ Volumes are specified for plugins and upload directories for persistence.
 
 -    latest - Tracks LimeSurvey latest stable release
 -    developmajor - Tracks LimeSurvey major development releases (see: https://github.com/LimeSurvey/LimeSurvey/tree/develop-major)
+-    v6 - Tracks version 6 releases
 
 Tags corresponding to version on https://community.limesurvey.org/downloads/
 
