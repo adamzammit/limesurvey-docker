@@ -49,7 +49,7 @@ if [ "$status" == "success" ] && [ "$status2" == "success" ]; then
 
     git tag $VERSION
 
-    git push --tags origin master
+    git push --tags origin v6
 else
     echo "Did not commit or push build: acspri/limesurvey:$VERSION due to error" | mail -s "Error in build $VERSION" adam@acspri.org.au
 fi
