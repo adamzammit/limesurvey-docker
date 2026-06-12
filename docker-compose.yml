@@ -18,9 +18,10 @@ services:
       - ./sessions:/var/lime/sessions
 
   mysql:
-    image: mariadb:10.5
+    image: mariadb:10.11
     environment:
       MYSQL_ROOT_PASSWORD: e/xa|m|ple
+      MARIADB_AUTO_UPGRADE: true
     volumes:
        - ./mysql:/var/lib/mysql
 
