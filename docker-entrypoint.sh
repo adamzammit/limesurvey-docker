@@ -215,8 +215,6 @@ EOPHP
             fi
         fi
 
-        #Set timezone based on environment to config file if not already there
-        grep -qF 'date_default_timezone_set' application/config/config.php || sed --in-place '/^}/a\$longName = exec("echo \\$TZ"); if (!empty($longName)) {date_default_timezone_set($longName);}' application/config/config.php
         chmod ug-w -R application/config
         chmod ug=rwx -R tmp
         chmod ug=rwx -R upload
